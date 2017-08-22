@@ -111,7 +111,7 @@ static size_t
 get_decode_outlen(const size_t inlen)
 {
     /* same assumption as lzfse_main.c */
-    return inlen * 4;
+    return 65536; //return inlen * 4;
 }
 
 static PyObject*
