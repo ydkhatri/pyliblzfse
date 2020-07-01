@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+#define PY_SSIZE_T_CLEAN
 #include <lzfse.h>
 #include <Python.h>
 
@@ -35,20 +36,20 @@ lzfse_op(PyObject* self,
                       const uint8_t *__restrict,
                       size_t,
                       void *__restrict),
-         size_t (*get_outlen)(const size_t),
+         size_t (*get_outlen)(const size_t, const uint8_t *buffer),
          size_t (*get_auxlen)(void))
 {
     PyObject *str;
     const char *in;
     char *out;
     void *aux;
-    int inlen;
+    Py_ssize_t inlen;
     size_t outlen;
 
     if (!PyArg_ParseTuple(args, "s#", &in, &inlen))
         return NULL;
 
-    outlen = get_outlen((size_t)inlen);
+    outlen = get_outlen((size_t)inlen, (const uint8_t *)in); 
     out = (char *)malloc(outlen + 1);
     if (!out)
         return PyErr_NoMemory();
@@ -87,7 +88,7 @@ lzfse_op(PyObject* self,
 }
 
 static size_t
-get_encode_outlen(const size_t inlen)
+get_encode_outlen(const size_t inlen, const uint8_t *buffer)
 {
     /* Extra 12 bytes for start/end block magics and block length in case the
      * compressed output is larger than the input, as in lzfse_encode.c */
@@ -108,10 +109,10 @@ PyDoc_STRVAR(compress_doc,
 "compress(string) -- Compress a buffer using LZFSE.");
 
 static size_t
-get_decode_outlen(const size_t inlen)
+get_decode_outlen(const size_t inlen, const uint8_t *buffer)
 {
-    /* same assumption as lzfse_main.c */
-    return 65536; //return inlen * 4;
+    // read uncompressed size from buffer, remove upper bits as size_t could be 8
+    return (*(size_t*)(buffer + 4) ) & 0xFFFFFFFF;;
 }
 
 static PyObject*
