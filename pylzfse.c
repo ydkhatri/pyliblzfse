@@ -112,7 +112,7 @@ static size_t
 get_decode_outlen(const size_t inlen, const uint8_t *buffer)
 {
     // read uncompressed size from buffer, remove upper bits as size_t could be 8
-    return (*(size_t*)(buffer + 4) ) & 0xFFFFFFFF;;
+    return (*(size_t*)(buffer + 4) ) & 0xFFFFFFFF;
 }
 
 static PyObject*
