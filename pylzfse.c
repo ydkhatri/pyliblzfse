@@ -106,7 +106,7 @@ lzfse_compress(PyObject* self, PyObject* args)
 }
 
 PyDoc_STRVAR(compress_doc,
-"compress(string) -- Compress a buffer using LZFSE.");
+"compress(buffer) -- Compress a buffer using LZFSE.");
 
 static size_t
 get_decode_outlen(const size_t inlen, const uint8_t *buffer)
@@ -126,7 +126,7 @@ lzfse_decompress(PyObject* self, PyObject* args)
 }
 
 PyDoc_STRVAR(decompress_doc,
-"decompress(string) -- Decompress a LZFSE-compressed buffer.");
+"decompress(buffer) -- Decompress a LZFSE/LZVN-compressed buffer.");
 
 static PyMethodDef LzfseMethods[] = {
     {"compress", lzfse_compress, METH_VARARGS, compress_doc},
