@@ -1,5 +1,6 @@
 # this file is part of pylzfse.
 #
+# Copyright (c) 2017-2020  Yogesh Khatri
 # Copyright (c) 2016, 2017 Dima Krasner
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,9 +34,9 @@ lzfse = Extension('lzfse',
                    language='c')
 
 setup(name='pylzfse',
-      version='0.2',
+      version='0.4',
       license='MIT',
-      author='Dima Krasner',
-      author_email='dima@dimakrasner.com',
+      author='Yogesh Khatri',
+      author_email='yogesh@swiftforensics.com',
       description='Python bindings for the LZFSE reference implementation',
       ext_modules=[lzfse])
