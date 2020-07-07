@@ -42,14 +42,19 @@ lzfse_op(PyObject* self,
     PyObject *str;
     const char *in;
     char *out;
+    char *out_realloc;
     void *aux;
     Py_ssize_t inlen;
     size_t outlen;
+    size_t op_output_len;
 
     if (!PyArg_ParseTuple(args, "s#", &in, &inlen))
         return NULL;
 
-    outlen = get_outlen((size_t)inlen, (const uint8_t *)in); 
+    outlen = get_outlen((size_t)inlen, (const uint8_t *)in);
+    //if (op == lzfse_decode_buffer)
+    //    outlen *= 4;
+ 
     out = (char *)malloc(outlen + 1);
     if (!out)
         return PyErr_NoMemory();
@@ -59,27 +64,47 @@ lzfse_op(PyObject* self,
         free(out);
         return PyErr_NoMemory();
     }
-
-    Py_BEGIN_ALLOW_THREADS
-    outlen = op((uint8_t *)out,
-                outlen,
-                (const uint8_t *)in,
-                (size_t)inlen,
-                aux);
-    Py_END_ALLOW_THREADS
+    while (1) {
+        Py_BEGIN_ALLOW_THREADS
+        op_output_len = op((uint8_t *)out,
+                    outlen,
+                    (const uint8_t *)in,
+                    (size_t)inlen,
+                    aux);
+        Py_END_ALLOW_THREADS
+        if (op == lzfse_decode_buffer) {
+            if (op_output_len == 0) // output was zero, something went wrong!
+                break;
+            if (op_output_len == outlen) { // Dest buffer too small. Double it
+                outlen *= 2;
+                out_realloc = (char *)realloc(out, outlen);
+                if (!out_realloc) {
+                    free(out);
+                    free(aux);
+                    return PyErr_NoMemory();
+                }
+                else
+                    out = out_realloc;
+            }
+            else
+                break; // all good!
+        }
+        else
+            break;
+    }
     free(aux);
 
-    if (!outlen) {
+    if (!op_output_len) {
         free(out);
         PyErr_SetNone(LzfseError);
         return NULL;
     }
 
-    out[outlen] = '\0';
+    out[op_output_len] = '\0';
 #if PY_MAJOR_VERSION >= 3
-    str = PyBytes_FromStringAndSize(out, (Py_ssize_t)outlen);
+    str = PyBytes_FromStringAndSize(out, (Py_ssize_t)op_output_len);
 #else
-    str = PyString_FromStringAndSize(out, (Py_ssize_t)outlen);
+    str = PyString_FromStringAndSize(out, (Py_ssize_t)op_output_len);
 #endif
     free(out);
     if (!str)
