@@ -1,4 +1,4 @@
-# this file is part of pylzfse.
+# this file is part of pyliblzfse.
 #
 # Copyright (c) 2017-2020  Yogesh Khatri
 # Copyright (c) 2016, 2017 Dima Krasner
@@ -22,21 +22,28 @@
 # SOFTWARE.
 
 import os
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 lzfse_dir = os.path.join('lzfse', 'src')
 lzfse_srcs = [os.path.join(lzfse_dir, x) for x in os.listdir(lzfse_dir) if x.endswith('.c') and x != 'lzfse_main.c']
 
-lzfse = Extension('lzfse',
+lzfse = Extension('liblzfse',
                    sources=lzfse_srcs + ['pylzfse.c'],
                    extra_compile_args=['-std=c99'],
                    include_dirs=[lzfse_dir],
                    language='c')
+                   
+f = open('README', 'r')
+description_from_readme = '<pre>' + f.read() + '</pre>'
+f.close()
 
-setup(name='pylzfse',
-      version='0.4',
+setup(name='pyliblzfse',
+      version='0.4.0',
       license='MIT',
       author='Yogesh Khatri',
       author_email='yogesh@swiftforensics.com',
       description='Python bindings for the LZFSE reference implementation',
+      long_description=description_from_readme,
+      long_description_content_type='text/markdown',
+      url='https://github.com/ydkhatri/pyliblzfse',
       ext_modules=[lzfse])

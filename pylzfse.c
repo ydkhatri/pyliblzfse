@@ -1,5 +1,5 @@
 /*
- * this file is part of pylzfse.
+ * this file is part of pyliblzfse.
  *
  * Copyright (c) 2017-2020  Yogesh Khatri
  * Copyright (c) 2016, 2017 Dima Krasner
@@ -163,7 +163,7 @@ static PyMethodDef LzfseMethods[] = {
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    "lzfse",
+    "liblzfse",
     "Python module for LZFSE",
     -1,
     LzfseMethods
@@ -172,7 +172,7 @@ static struct PyModuleDef moduledef = {
 
 PyMODINIT_FUNC
 #if PY_MAJOR_VERSION >= 3
-PyInit_lzfse(void)
+PyInit_liblzfse(void)
 {
     PyObject *m = PyModule_Create(&moduledef);
     if (!m)
@@ -180,12 +180,12 @@ PyInit_lzfse(void)
 #else
 initlzfse(void)
 {
-    PyObject *m = Py_InitModule("lzfse", LzfseMethods);
+    PyObject *m = Py_InitModule("liblzfse", LzfseMethods);
     if (!m)
         return;
 #endif
 
-    LzfseError = PyErr_NewException("lzfse.error", NULL, NULL);
+    LzfseError = PyErr_NewException("liblzfse.error", NULL, NULL);
     if (LzfseError) {
         Py_INCREF(LzfseError);
         PyModule_AddObject(m, "error", LzfseError);

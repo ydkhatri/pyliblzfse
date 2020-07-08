@@ -1,28 +1,55 @@
-             _      __
- _ __  _   _| |____/ _|___  ___
-| '_ \| | | | |_  / |_/ __|/ _ \
-| |_) | |_| | |/ /|  _\__ \  __/
-| .__/ \__, |_/___|_| |___/\___|
-|_|    |___/
+             _ _ _     _        ___           
+            | (_) |   | |      / __)          
+ ____  _   _| |_| | _ | |_____| |__ ___  ____ 
+|  _ \| | | | | | || \| (___  )  __)___)/ _  )
+| | | | |_| | | | |_) ) |/ __/| | |___ ( (/ / 
+| ||_/ \__  |_|_|____/|_(_____)_| (___/ \____)
+|_|   (____/                                  
 
 Overview
 ========
 
-pylzfse is a Python (https://www.python.org/) module that provides LZFSE
-compression and decompression through the reference implementation provided by
-Apple (https://github.com/lzfse/lzfse).
+pyliblzfse is a Python (https://www.python.org/) module that provides LZFSE 
+and LZVN compression and decompression through the reference implementation 
+provided by Apple (https://github.com/lzfse/lzfse).
+
+Installation
+============
+
+  pip3 install pyliblzfse
+
+If you are using python 3.7 or higher, you don't need a dev environment to
+install on macOS or Windows.
 
 Building
 ========
 
-  $ git clone --recursive https://github.com/dimkr/pylzfse
+  $ git clone --recursive https://github.com/ydkhatri/pyliblzfse
   $ python setup.py build
+
+Usage
+=====
+
+  import liblzfse
+  try:
+    decrypted_data = liblzfse.decompress(encrypted_data)
+  except liblzfse.error:
+    print('liblzfse had an error!')
+
+The library expects encrypted_data to be of the form b'bvx*......bvx$'.
+
+Notes
+=====
+
+This is a fork of pylzfse project, which incorporates certain improvements and
+provides python wheel builds (for 3.7+) so end users do not need to compile it.
 
 Credits and Legal Information
 =============================
 
-pylzfse is free and unencumbered software released under the terms of the MIT
+pyliblzfse is free and unencumbered software released under the terms of the MIT
 license; see COPYING for the license text. For a list of its authors and
 contributors, see AUTHORS.
 
-The ASCII art logo at the top was made using FIGlet (http://www.figlet.org/).
+The ASCII art logo at the top was made using 
+http://manytools.org/hacker-tools/ascii-banner
