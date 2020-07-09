@@ -38,7 +38,7 @@ description_from_readme = '<pre>' + f.read() + '</pre>'
 f.close()
 
 setup(name='pyliblzfse',
-      version='0.4.0',
+      version='0.4.1',
       license='MIT',
       author='Yogesh Khatri',
       author_email='yogesh@swiftforensics.com',
