@@ -25,10 +25,10 @@ import os
 from setuptools import setup, Extension
 
 lzfse_dir = os.path.join('lzfse', 'src')
-lzfse_srcs = [os.path.join(lzfse_dir, x) for x in os.listdir(lzfse_dir) if (x.endswith('.c') or x.endswith('.h')) and x != 'lzfse_main.c']
+lzfse_srcs = [os.path.join(lzfse_dir, x) for x in os.listdir(lzfse_dir) if x.endswith('.c') and x != 'lzfse_main.c']
 
 lzfse = Extension('liblzfse',
-                   sources=lzfse_srcs + ['pylzfse.c', 'LICENSE.lzfse', 'COPYING', 'AUTHORS'],
+                   sources=lzfse_srcs + ['pylzfse.c'],
                    extra_compile_args=['-std=c99'],
                    include_dirs=[lzfse_dir],
                    language='c')
